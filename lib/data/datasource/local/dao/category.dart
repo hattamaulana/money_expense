@@ -1,0 +1,9 @@
+import 'package:drift/drift.dart';
+import 'package:money_expense/data/datasource/local/database.dart';
+
+part 'category.g.dart';
+
+@DriftAccessor(tables: [Category])
+class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin {
+  CategoryDao(AppDatabase db) : super(db);
+}

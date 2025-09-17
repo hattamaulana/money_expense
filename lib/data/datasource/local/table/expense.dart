@@ -1,0 +1,13 @@
+part of '../database.dart';
+
+class Expense extends Table {
+  IntColumn get id => integer().autoIncrement()();
+
+  TextColumn get name => text()();
+
+  IntColumn get categoryId => integer()();
+
+  DateTimeColumn get dueDate => dateTime()();
+
+  IntColumn get amount => integer()();
+}
