@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class DOTSelectorField extends StatelessWidget {
   final VoidCallback onTap;
-  final Widget leadingIcon;
+  final Widget? leadingIcon;
   final String text;
   final Widget trailingIcon;
 
   const DOTSelectorField({
     super.key,
+    this.leadingIcon,
     required this.onTap,
-    required this.leadingIcon,
     required this.text,
     required this.trailingIcon,
   });
@@ -22,19 +22,21 @@ class DOTSelectorField extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(color: Colors.grey.shade300),
         ),
         child: Row(
           children: [
-            leadingIcon,
-            const SizedBox(width: 12),
-            Text(
-              text,
-              style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
-            ),
+            if (leadingIcon != null) leadingIcon!,
+            if (leadingIcon != null) const SizedBox(width: 12),
+            
+            Text(text,style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).colorScheme.secondary,
+            )),
+
             const Spacer(),
+
             trailingIcon,
           ],
         ),
