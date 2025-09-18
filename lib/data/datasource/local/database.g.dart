@@ -40,8 +40,17 @@ class $CategoryTable extends Category
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
   @override
-  List<GeneratedColumn> get $columns => [id, name, icon];
+  late final GeneratedColumn<String> color = GeneratedColumn<String>(
+    'color',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, name, icon, color];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -73,6 +82,14 @@ class $CategoryTable extends Category
     } else if (isInserting) {
       context.missing(_iconMeta);
     }
+    if (data.containsKey('color')) {
+      context.handle(
+        _colorMeta,
+        color.isAcceptableOrUnknown(data['color']!, _colorMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_colorMeta);
+    }
     return context;
   }
 
@@ -94,6 +111,10 @@ class $CategoryTable extends Category
         DriftSqlType.string,
         data['${effectivePrefix}icon'],
       )!,
+      color: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}color'],
+      )!,
     );
   }
 
@@ -107,10 +128,12 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
   final int id;
   final String name;
   final String icon;
+  final String color;
   const CategoryData({
     required this.id,
     required this.name,
     required this.icon,
+    required this.color,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -118,6 +141,7 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['icon'] = Variable<String>(icon);
+    map['color'] = Variable<String>(color);
     return map;
   }
 
@@ -126,6 +150,7 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
       id: Value(id),
       name: Value(name),
       icon: Value(icon),
+      color: Value(color),
     );
   }
 
@@ -138,6 +163,7 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       icon: serializer.fromJson<String>(json['icon']),
+      color: serializer.fromJson<String>(json['color']),
     );
   }
   @override
@@ -147,19 +173,23 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'icon': serializer.toJson<String>(icon),
+      'color': serializer.toJson<String>(color),
     };
   }
 
-  CategoryData copyWith({int? id, String? name, String? icon}) => CategoryData(
-    id: id ?? this.id,
-    name: name ?? this.name,
-    icon: icon ?? this.icon,
-  );
+  CategoryData copyWith({int? id, String? name, String? icon, String? color}) =>
+      CategoryData(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        icon: icon ?? this.icon,
+        color: color ?? this.color,
+      );
   CategoryData copyWithCompanion(CategoryCompanion data) {
     return CategoryData(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       icon: data.icon.present ? data.icon.value : this.icon,
+      color: data.color.present ? data.color.value : this.color,
     );
   }
 
@@ -168,46 +198,54 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
     return (StringBuffer('CategoryData(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('icon: $icon')
+          ..write('icon: $icon, ')
+          ..write('color: $color')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, icon);
+  int get hashCode => Object.hash(id, name, icon, color);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is CategoryData &&
           other.id == this.id &&
           other.name == this.name &&
-          other.icon == this.icon);
+          other.icon == this.icon &&
+          other.color == this.color);
 }
 
 class CategoryCompanion extends UpdateCompanion<CategoryData> {
   final Value<int> id;
   final Value<String> name;
   final Value<String> icon;
+  final Value<String> color;
   const CategoryCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.icon = const Value.absent(),
+    this.color = const Value.absent(),
   });
   CategoryCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required String icon,
+    required String color,
   }) : name = Value(name),
-       icon = Value(icon);
+       icon = Value(icon),
+       color = Value(color);
   static Insertable<CategoryData> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? icon,
+    Expression<String>? color,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (icon != null) 'icon': icon,
+      if (color != null) 'color': color,
     });
   }
 
@@ -215,11 +253,13 @@ class CategoryCompanion extends UpdateCompanion<CategoryData> {
     Value<int>? id,
     Value<String>? name,
     Value<String>? icon,
+    Value<String>? color,
   }) {
     return CategoryCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       icon: icon ?? this.icon,
+      color: color ?? this.color,
     );
   }
 
@@ -235,6 +275,9 @@ class CategoryCompanion extends UpdateCompanion<CategoryData> {
     if (icon.present) {
       map['icon'] = Variable<String>(icon.value);
     }
+    if (color.present) {
+      map['color'] = Variable<String>(color.value);
+    }
     return map;
   }
 
@@ -243,7 +286,8 @@ class CategoryCompanion extends UpdateCompanion<CategoryData> {
     return (StringBuffer('CategoryCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('icon: $icon')
+          ..write('icon: $icon, ')
+          ..write('color: $color')
           ..write(')'))
         .toString();
   }
@@ -287,12 +331,12 @@ class $ExpenseTable extends Expense with TableInfo<$ExpenseTable, ExpenseData> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _dueDateMeta = const VerificationMeta(
-    'dueDate',
+  static const VerificationMeta _datetimeMeta = const VerificationMeta(
+    'datetime',
   );
   @override
-  late final GeneratedColumn<DateTime> dueDate = GeneratedColumn<DateTime>(
-    'due_date',
+  late final GeneratedColumn<DateTime> datetime = GeneratedColumn<DateTime>(
+    'datetime',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
@@ -308,7 +352,13 @@ class $ExpenseTable extends Expense with TableInfo<$ExpenseTable, ExpenseData> {
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [id, name, categoryId, dueDate, amount];
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    categoryId,
+    datetime,
+    amount,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -340,13 +390,13 @@ class $ExpenseTable extends Expense with TableInfo<$ExpenseTable, ExpenseData> {
     } else if (isInserting) {
       context.missing(_categoryIdMeta);
     }
-    if (data.containsKey('due_date')) {
+    if (data.containsKey('datetime')) {
       context.handle(
-        _dueDateMeta,
-        dueDate.isAcceptableOrUnknown(data['due_date']!, _dueDateMeta),
+        _datetimeMeta,
+        datetime.isAcceptableOrUnknown(data['datetime']!, _datetimeMeta),
       );
     } else if (isInserting) {
-      context.missing(_dueDateMeta);
+      context.missing(_datetimeMeta);
     }
     if (data.containsKey('amount')) {
       context.handle(
@@ -377,9 +427,9 @@ class $ExpenseTable extends Expense with TableInfo<$ExpenseTable, ExpenseData> {
         DriftSqlType.int,
         data['${effectivePrefix}category_id'],
       )!,
-      dueDate: attachedDatabase.typeMapping.read(
+      datetime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}due_date'],
+        data['${effectivePrefix}datetime'],
       )!,
       amount: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -398,13 +448,13 @@ class ExpenseData extends DataClass implements Insertable<ExpenseData> {
   final int id;
   final String name;
   final int categoryId;
-  final DateTime dueDate;
+  final DateTime datetime;
   final int amount;
   const ExpenseData({
     required this.id,
     required this.name,
     required this.categoryId,
-    required this.dueDate,
+    required this.datetime,
     required this.amount,
   });
   @override
@@ -413,7 +463,7 @@ class ExpenseData extends DataClass implements Insertable<ExpenseData> {
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['category_id'] = Variable<int>(categoryId);
-    map['due_date'] = Variable<DateTime>(dueDate);
+    map['datetime'] = Variable<DateTime>(datetime);
     map['amount'] = Variable<int>(amount);
     return map;
   }
@@ -423,7 +473,7 @@ class ExpenseData extends DataClass implements Insertable<ExpenseData> {
       id: Value(id),
       name: Value(name),
       categoryId: Value(categoryId),
-      dueDate: Value(dueDate),
+      datetime: Value(datetime),
       amount: Value(amount),
     );
   }
@@ -437,7 +487,7 @@ class ExpenseData extends DataClass implements Insertable<ExpenseData> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       categoryId: serializer.fromJson<int>(json['categoryId']),
-      dueDate: serializer.fromJson<DateTime>(json['dueDate']),
+      datetime: serializer.fromJson<DateTime>(json['datetime']),
       amount: serializer.fromJson<int>(json['amount']),
     );
   }
@@ -448,7 +498,7 @@ class ExpenseData extends DataClass implements Insertable<ExpenseData> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'categoryId': serializer.toJson<int>(categoryId),
-      'dueDate': serializer.toJson<DateTime>(dueDate),
+      'datetime': serializer.toJson<DateTime>(datetime),
       'amount': serializer.toJson<int>(amount),
     };
   }
@@ -457,13 +507,13 @@ class ExpenseData extends DataClass implements Insertable<ExpenseData> {
     int? id,
     String? name,
     int? categoryId,
-    DateTime? dueDate,
+    DateTime? datetime,
     int? amount,
   }) => ExpenseData(
     id: id ?? this.id,
     name: name ?? this.name,
     categoryId: categoryId ?? this.categoryId,
-    dueDate: dueDate ?? this.dueDate,
+    datetime: datetime ?? this.datetime,
     amount: amount ?? this.amount,
   );
   ExpenseData copyWithCompanion(ExpenseCompanion data) {
@@ -473,7 +523,7 @@ class ExpenseData extends DataClass implements Insertable<ExpenseData> {
       categoryId: data.categoryId.present
           ? data.categoryId.value
           : this.categoryId,
-      dueDate: data.dueDate.present ? data.dueDate.value : this.dueDate,
+      datetime: data.datetime.present ? data.datetime.value : this.datetime,
       amount: data.amount.present ? data.amount.value : this.amount,
     );
   }
@@ -484,14 +534,14 @@ class ExpenseData extends DataClass implements Insertable<ExpenseData> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('categoryId: $categoryId, ')
-          ..write('dueDate: $dueDate, ')
+          ..write('datetime: $datetime, ')
           ..write('amount: $amount')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, categoryId, dueDate, amount);
+  int get hashCode => Object.hash(id, name, categoryId, datetime, amount);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -499,7 +549,7 @@ class ExpenseData extends DataClass implements Insertable<ExpenseData> {
           other.id == this.id &&
           other.name == this.name &&
           other.categoryId == this.categoryId &&
-          other.dueDate == this.dueDate &&
+          other.datetime == this.datetime &&
           other.amount == this.amount);
 }
 
@@ -507,37 +557,37 @@ class ExpenseCompanion extends UpdateCompanion<ExpenseData> {
   final Value<int> id;
   final Value<String> name;
   final Value<int> categoryId;
-  final Value<DateTime> dueDate;
+  final Value<DateTime> datetime;
   final Value<int> amount;
   const ExpenseCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.categoryId = const Value.absent(),
-    this.dueDate = const Value.absent(),
+    this.datetime = const Value.absent(),
     this.amount = const Value.absent(),
   });
   ExpenseCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required int categoryId,
-    required DateTime dueDate,
+    required DateTime datetime,
     required int amount,
   }) : name = Value(name),
        categoryId = Value(categoryId),
-       dueDate = Value(dueDate),
+       datetime = Value(datetime),
        amount = Value(amount);
   static Insertable<ExpenseData> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<int>? categoryId,
-    Expression<DateTime>? dueDate,
+    Expression<DateTime>? datetime,
     Expression<int>? amount,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (categoryId != null) 'category_id': categoryId,
-      if (dueDate != null) 'due_date': dueDate,
+      if (datetime != null) 'datetime': datetime,
       if (amount != null) 'amount': amount,
     });
   }
@@ -546,14 +596,14 @@ class ExpenseCompanion extends UpdateCompanion<ExpenseData> {
     Value<int>? id,
     Value<String>? name,
     Value<int>? categoryId,
-    Value<DateTime>? dueDate,
+    Value<DateTime>? datetime,
     Value<int>? amount,
   }) {
     return ExpenseCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       categoryId: categoryId ?? this.categoryId,
-      dueDate: dueDate ?? this.dueDate,
+      datetime: datetime ?? this.datetime,
       amount: amount ?? this.amount,
     );
   }
@@ -570,8 +620,8 @@ class ExpenseCompanion extends UpdateCompanion<ExpenseData> {
     if (categoryId.present) {
       map['category_id'] = Variable<int>(categoryId.value);
     }
-    if (dueDate.present) {
-      map['due_date'] = Variable<DateTime>(dueDate.value);
+    if (datetime.present) {
+      map['datetime'] = Variable<DateTime>(datetime.value);
     }
     if (amount.present) {
       map['amount'] = Variable<int>(amount.value);
@@ -585,7 +635,7 @@ class ExpenseCompanion extends UpdateCompanion<ExpenseData> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('categoryId: $categoryId, ')
-          ..write('dueDate: $dueDate, ')
+          ..write('datetime: $datetime, ')
           ..write('amount: $amount')
           ..write(')'))
         .toString();
@@ -611,12 +661,14 @@ typedef $$CategoryTableCreateCompanionBuilder =
       Value<int> id,
       required String name,
       required String icon,
+      required String color,
     });
 typedef $$CategoryTableUpdateCompanionBuilder =
     CategoryCompanion Function({
       Value<int> id,
       Value<String> name,
       Value<String> icon,
+      Value<String> color,
     });
 
 class $$CategoryTableFilterComposer
@@ -640,6 +692,11 @@ class $$CategoryTableFilterComposer
 
   ColumnFilters<String> get icon => $composableBuilder(
     column: $table.icon,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get color => $composableBuilder(
+    column: $table.color,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -667,6 +724,11 @@ class $$CategoryTableOrderingComposer
     column: $table.icon,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$CategoryTableAnnotationComposer
@@ -686,6 +748,9 @@ class $$CategoryTableAnnotationComposer
 
   GeneratedColumn<String> get icon =>
       $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
 }
 
 class $$CategoryTableTableManager
@@ -722,13 +787,25 @@ class $$CategoryTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> icon = const Value.absent(),
-              }) => CategoryCompanion(id: id, name: name, icon: icon),
+                Value<String> color = const Value.absent(),
+              }) => CategoryCompanion(
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+              ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 required String name,
                 required String icon,
-              }) => CategoryCompanion.insert(id: id, name: name, icon: icon),
+                required String color,
+              }) => CategoryCompanion.insert(
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
@@ -759,7 +836,7 @@ typedef $$ExpenseTableCreateCompanionBuilder =
       Value<int> id,
       required String name,
       required int categoryId,
-      required DateTime dueDate,
+      required DateTime datetime,
       required int amount,
     });
 typedef $$ExpenseTableUpdateCompanionBuilder =
@@ -767,7 +844,7 @@ typedef $$ExpenseTableUpdateCompanionBuilder =
       Value<int> id,
       Value<String> name,
       Value<int> categoryId,
-      Value<DateTime> dueDate,
+      Value<DateTime> datetime,
       Value<int> amount,
     });
 
@@ -795,8 +872,8 @@ class $$ExpenseTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get dueDate => $composableBuilder(
-    column: $table.dueDate,
+  ColumnFilters<DateTime> get datetime => $composableBuilder(
+    column: $table.datetime,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -830,8 +907,8 @@ class $$ExpenseTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get dueDate => $composableBuilder(
-    column: $table.dueDate,
+  ColumnOrderings<DateTime> get datetime => $composableBuilder(
+    column: $table.datetime,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -861,8 +938,8 @@ class $$ExpenseTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<DateTime> get dueDate =>
-      $composableBuilder(column: $table.dueDate, builder: (column) => column);
+  GeneratedColumn<DateTime> get datetime =>
+      $composableBuilder(column: $table.datetime, builder: (column) => column);
 
   GeneratedColumn<int> get amount =>
       $composableBuilder(column: $table.amount, builder: (column) => column);
@@ -902,13 +979,13 @@ class $$ExpenseTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<int> categoryId = const Value.absent(),
-                Value<DateTime> dueDate = const Value.absent(),
+                Value<DateTime> datetime = const Value.absent(),
                 Value<int> amount = const Value.absent(),
               }) => ExpenseCompanion(
                 id: id,
                 name: name,
                 categoryId: categoryId,
-                dueDate: dueDate,
+                datetime: datetime,
                 amount: amount,
               ),
           createCompanionCallback:
@@ -916,13 +993,13 @@ class $$ExpenseTableTableManager
                 Value<int> id = const Value.absent(),
                 required String name,
                 required int categoryId,
-                required DateTime dueDate,
+                required DateTime datetime,
                 required int amount,
               }) => ExpenseCompanion.insert(
                 id: id,
                 name: name,
                 categoryId: categoryId,
-                dueDate: dueDate,
+                datetime: datetime,
                 amount: amount,
               ),
           withReferenceMapper: (p0) => p0

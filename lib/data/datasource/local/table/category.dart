@@ -6,4 +6,6 @@ class Category extends Table {
   TextColumn get name => text()();
 
   TextColumn get icon => text()();
+
+  TextColumn get color => text()();
 }

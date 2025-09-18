@@ -37,6 +37,8 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.22
   path_provider: ^2.1.3
   path: ^1.9.0
+  # Widgets
+  flutter_easyloading: ^3.0.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

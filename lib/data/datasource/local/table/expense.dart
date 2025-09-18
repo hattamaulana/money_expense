@@ -7,7 +7,7 @@ class Expense extends Table {
 
   IntColumn get categoryId => integer()();
 
-  DateTimeColumn get dueDate => dateTime()();
+  DateTimeColumn get datetime => dateTime()();
 
   IntColumn get amount => integer()();
 }

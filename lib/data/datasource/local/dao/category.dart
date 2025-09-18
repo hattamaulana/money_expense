@@ -5,5 +5,5 @@ part 'category.g.dart';
 
 @DriftAccessor(tables: [Category])
 class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin {
-  CategoryDao(AppDatabase db) : super(db);
+  CategoryDao(super.db);
 }
