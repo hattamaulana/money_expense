@@ -8,8 +8,12 @@ class AppTheme {
     useMaterial3: true,
 
     colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColor.Primary,
+      seedColor: AppColor.Blue,
+      primary: AppColor.Blue,
+      secondary: Colors.grey.shade700,
       brightness: Brightness.light,
+      surface: Colors.white,
+      
     ),
 
     textTheme: const TextTheme(
@@ -28,7 +32,8 @@ class AppTheme {
     useMaterial3: true,
 
     colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColor.Primary,
+      seedColor: AppColor.Blue,
+      primary: AppColor.Blue,
       brightness: Brightness.dark,
     ),
 

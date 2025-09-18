@@ -36,7 +36,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
     required DateTime end,
   }) async {
     return await _dao.getExpenseByDate(
-      start: start,
+      start: start.copyWith(hour: 0, minute: 0, second: 0),
       end: end.copyWith(hour: 23, minute: 59, second: 59),
     );
   }

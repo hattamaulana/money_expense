@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
 import 'package:money_expense/domain/model/expense_w_category.dart';
+import 'package:money_expense/domain/model/expense_w_total.dart';
 import 'package:money_expense/domain/usecase/category_usecase.dart';
 import 'package:money_expense/domain/usecase/expense_usecase.dart';
+import 'package:money_expense/routes/app_pages.dart';
 
 
 @injectable
@@ -24,20 +26,33 @@ class HomeController extends GetxController {
     this._expenseYesterdayUsecase,
   );
 
-  final daily = RxInt(0);
-  final monthly = RxInt(0);
-  final dataByCategory = Rxn<ExpenseWithCategoryModel>();
-  final dataToday = Rxn<ExpenseWithCategoryModel>();
-  final dataYesterday = Rxn<ExpenseWithCategoryModel>();
+  final daily = RxDouble(0);
+  final monthly = RxDouble(0);
+  final dataByCategory = Rxn<List<TotalEveryCategory>>();
+  final dataToday = Rxn<List<ExpenseWithCategoryModel>>();
+  final dataYesterday = Rxn<List<ExpenseWithCategoryModel>>();
   
   @override
   void onInit() async {
     super.onInit();
 
     await _initializeCategoryUsecase.execute();
+    load();
   }
 
-  void load() {
+  void load() async {
+    daily(await _totalExpenseDailyUsecase.execute());
+    monthly(await _totalExpenseMonthlyUsecase.execute());
+    dataByCategory(await _expenseByCategoryUsecase.execute());
+    dataToday(await _expenseTodayUsecase.execute());
+    dataYesterday(await _expenseYesterdayUsecase.execute());
+  }
 
+  void navigateToAddExpense() async {
+    final res = await Get.toNamed(Routes.EXPENSE_ADD);
+
+    if (res != null) {
+      load();
+    }
   }
 }

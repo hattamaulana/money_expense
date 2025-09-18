@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:money_expense/injection/injection.dart';
@@ -9,11 +8,6 @@ import 'package:money_expense/utils/translations/app_translations.dart';
 
 void main() {
   configureInjection();
-
-  // SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  //   DeviceOrientation.portraitDown,
-  // ]);
 
   runApp(
     GetMaterialApp(

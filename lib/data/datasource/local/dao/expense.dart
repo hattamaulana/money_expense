@@ -13,40 +13,14 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
 
   Future<int> insert(ExpenseCompanion data) => into(expense).insert(data);
 
-  Future<List<ExpenseWithCategoryModel>> fetchAll() async {
-    final query = select(
-      expense,
-    ).join([innerJoin(category, category.id.equalsExp(expense.categoryId))]);
-    final result = await query.get();
-
-    return result.map((row) {
-      final resultExpense = row.readTable(expense);
-      final resultCategory = row.readTable(category);
-
-      return ExpenseWithCategoryModel(
-        expense: ExpenseModel(
-          datetime: resultExpense.datetime,
-          name: resultExpense.name,
-          amount: resultExpense.amount,
-        ),
-        category: CategoryModel(
-          id: resultCategory.id,
-          name: resultCategory.name,
-          icon: resultCategory.icon,
-          color: resultCategory.color,
-        ),
-      );
-    }).toList();
-  }
-
   /// Gets the sum amounts for a specific day.
   Future<double> getTotalAmountForDay(DateTime date) async {
+    final start = DateTime.now().copyWith(hour: 0, minute: 0, second: 0);
+    final end = DateTime.now().copyWith(hour: 23, minute: 59, second: 59);
     final amountSum = expense.amount.sum();
     final query = selectOnly(expense)
       ..addColumns([amountSum])
-      ..where(expense.datetime.year.equals(date.year))
-      ..where(expense.datetime.month.equals(date.month))
-      ..where(expense.datetime.day.equals(date.day));
+      ..where(expense.datetime.isBetween(Constant(start), Constant(end)));
 
     return await query.map((row) => row.read(amountSum)).getSingle() ?? 0.0;
   }

@@ -1,55 +1,50 @@
 import 'package:flutter/material.dart';
 
 class GridCard extends StatelessWidget {
-  final IconData icon;
-  final Color iconBackgroundColor;
+  final Widget leadingIcon;
   final String categoryName;
   final String amount;
 
   const GridCard({
     super.key,
-    required this.icon,
-    required this.iconBackgroundColor,
+    required this.leadingIcon,
     required this.categoryName,
     required this.amount,
   });
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 140,
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withAlpha(10),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+            color: Theme.of(context).colorScheme.inverseSurface.withAlpha(30),
+            spreadRadius: 2,
+            blurRadius: 6,
+            offset: Offset(0, 4),
           ),
         ],
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min, 
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // The circular icon
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: iconBackgroundColor,
-            child: Icon(icon, color: Colors.white, size: 24),
-          ),
+          leadingIcon,
           const SizedBox(height: 16),
 
           // The category name text
           Text(
             categoryName,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: Theme.of(
+                context,
+              ).colorScheme.inverseSurface.withAlpha(100),
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 4),
@@ -57,9 +52,8 @@ class GridCard extends StatelessWidget {
           // The amount text
           Text(
             amount,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).colorScheme.inverseSurface,
               fontWeight: FontWeight.bold,
             ),
           ),

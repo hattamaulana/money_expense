@@ -86,7 +86,7 @@ class ExpenseAddController extends GetxController {
     }
 
     if (success) {
-      Get.back();
+      Get.back(result: true);
     } 
 
     return message;
