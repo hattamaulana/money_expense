@@ -4,5 +4,6 @@ part of 'expense.dart';
 
 // ignore_for_file: type=lint
 mixin _$ExpenseDaoMixin on DatabaseAccessor<AppDatabase> {
+  $CategoryTable get category => attachedDatabase.category;
   $ExpenseTable get expense => attachedDatabase.expense;
 }

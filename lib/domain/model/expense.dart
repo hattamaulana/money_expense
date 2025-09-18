@@ -1,15 +1,12 @@
-import 'package:money_expense/domain/model/category.dart';
 
 class ExpenseModel {
-  DateTime? datetime;
-  String? name;
-  int? amount;
-  CategoryModel? category;
+  DateTime datetime;
+  String name;
+  double amount;
 
   ExpenseModel({
-    this.datetime,
-    this.name,
-    this.amount,
-    this.category,
+    required this.datetime,
+    required this.name,
+    required this.amount,
   });
 }

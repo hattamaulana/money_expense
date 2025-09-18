@@ -7,5 +7,5 @@ class Category extends Table {
 
   TextColumn get icon => text()();
 
-  TextColumn get color => text()();
+  IntColumn get color => integer()();
 }

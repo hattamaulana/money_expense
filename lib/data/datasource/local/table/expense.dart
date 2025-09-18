@@ -5,9 +5,9 @@ class Expense extends Table {
 
   TextColumn get name => text()();
 
-  IntColumn get categoryId => integer()();
+  RealColumn get amount => real()();
 
   DateTimeColumn get datetime => dateTime()();
 
-  IntColumn get amount => integer()();
+  IntColumn get categoryId => integer().references(Category, #id, onDelete: KeyAction.cascade)();
 }
