@@ -1,16 +1,22 @@
-# money_expense
+# Money Expense
 
 A new Flutter project.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Home Dashboard (Fitur Utama)
+- Record Pengeluaran (Fitur Utama)
+- Dark & Light Theme
+- Multi language
+- Menggunakan Dependency Injection
+- Menggunakan SQLITE dengan orm drift
 
-A few resources to get you started if this is your first Flutter project:
+## Preview
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<video width="320" height="680" controls>
+  <source src="screen-recording.mp4" type="video/mp4">
+</video>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Files
+- [File Apkg](./apks/v1.0.0.release.apk)
+
